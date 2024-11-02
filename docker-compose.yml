@@ -1,0 +1,20 @@
+version: '3'
+name: population
+
+services:
+
+  animeenigma-postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgresUser
+      POSTGRES_PASSWORD: pgSuperSecretMnogaBycaBab
+      POSTGRES_DB: population
+    ports:
+      - 127.0.0.1:5432:5432
+    volumes: 
+      - postgres:/data
+
+volumes:
+  postgres:
+    driver: local
