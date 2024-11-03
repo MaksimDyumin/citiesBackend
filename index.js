@@ -4,21 +4,6 @@ import pg from "./sql.js"
 
 const app = express()
 
-load({
-    stateStore: './migrations/.migrate',
-    migrationsDirectory: './migrations',
-}, function (err, set) {
-    if (err) {
-        throw err
-    }
-    set.up(function (err) {
-        if (err) {
-            throw err
-        }
-        console.log('migrations successfully ran')
-    })
-})
-
 app.get('/peoples', async function (req, res) {
     const result = {}
 
