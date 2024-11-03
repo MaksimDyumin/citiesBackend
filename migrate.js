@@ -1,5 +1,5 @@
 import { load } from 'migrate';
-import pg from '../sql.js'; // подключение к базе данных
+import pg from './sql.js';
 
 load(
   {
@@ -15,10 +15,8 @@ load(
         throw err;
       }
       console.log('Migrations successfully ran');
-
-      // Закрытие соединения с базой данных после завершения миграции
       try {
-        await pg.end(); // Завершение соединения
+        await pg.end()
       } catch (closeErr) {
         console.error('Ошибка при завершении соединения:', closeErr);
       }
