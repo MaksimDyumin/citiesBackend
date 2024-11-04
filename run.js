@@ -1,14 +1,20 @@
-// run.js
-import './migrate.js' // выполняет миграции, экспортируя функцию
+import fs from 'node:fs';
+
 
 async function runMigrationsAndStartApp() {
   try {
-    await import('./migrate.js'); // ждем выполнения миграций
-    console.log('Миграции успешно выполнены.');
-    await import('./index.js'); // Запускаем index.js после завершения миграций
+    const isAlreadyMigrated = fs.existsSync('./migrations/.migrate');
+
+    if (!isAlreadyMigrated) {
+      await import('./migrate.js');
+      console.log('Миграции успешно выполнены.');
+    } else {
+      console.log('Миграции уже были выполнены ранее.');
+    }
+    await import('./index.js');
   } catch (err) {
     console.error('Ошибка при выполнении миграций:', err);
-    process.exit(1); // Завершаем процесс с кодом ошибки
+    process.exit(1);
   }
 }
 
