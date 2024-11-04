@@ -7,7 +7,7 @@ export async function up(next) {
     await pg.begin(async sql => {
       if (parsedData.citiesValues.length > 0) {
         await sql`
-          INSERT INTO citys (name) VALUES ${sql(parsedData.citiesValues)}
+          INSERT INTO citys (name, data) VALUES ${sql(parsedData.citiesValues)}
         `;
       }
 

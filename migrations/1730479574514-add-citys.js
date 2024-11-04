@@ -6,7 +6,8 @@ export async function up (next) {
     await pg`CREATE TABLE citys (
       id SERIAL PRIMARY KEY,
       name VARCHAR(255),
-      country_id integer
+      country_id integer,
+      data integer
     )`
     next()
   } catch (err) {

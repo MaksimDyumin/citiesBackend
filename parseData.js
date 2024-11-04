@@ -3,7 +3,7 @@ import fs from "node:fs";
 const citiesTree = JSON.parse(fs.readFileSync("./json/citiesTree.json").toString());
 const cities = JSON.parse(fs.readFileSync("./json/cities.json").toString());
 
-const citiesValues = cities.map(city => [city.name]);
+const citiesValues = cities.map(city => [city.name, city.data]);
 
 const districts = [];
 const streets = [];
