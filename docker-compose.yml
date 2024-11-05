@@ -1,20 +1,48 @@
-version: '3'
-name: population
+name: cities
+
+networks:
+  app-network:  # Создаем пользовательскую сеть
+    driver: bridge
 
 services:
-
-  animeenigma-postgres:
-    image: postgres
-    restart: always
+  # Сервис для PostgreSQL
+  postgresDB:
+    image: postgres  # Используем образ PostgreSQL
     environment:
-      POSTGRES_USER: postgresUser
-      POSTGRES_PASSWORD: pgSuperSecretMnogaBycaBab
-      POSTGRES_DB: population
+      POSTGRES_USER: postgresUser  # Имя пользователя
+      POSTGRES_PASSWORD: pgSuperSecretMnogaBycaBab  # Пароль
+      POSTGRES_DB: population  # Имя создаваемой базы данных
     ports:
-      - 127.0.0.1:5432:5432
+      - "5432:5432"  # Пробрасываем порт 5432
+    networks:
+      - app-network
     volumes: 
-      - postgres:/data
+      - postgres:/var/lib/postgresql/data  # Для хранения данных
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgresUser"]  # Проверка состояния
+      timeout: 5s
+      retries: 20
+
+  # Сервис для Express.js
+  express-app:
+    build:
+      context: .  # Указываем контекст сборки
+      dockerfile: Dockerfile  # Указываем имя Dockerfile
+    depends_on:
+      postgresDB:
+        condition: service_healthy  # Ждем, пока база данных станет доступной
+    environment:
+      DB_HOST: postgresDB  # Имя сервиса базы данных
+      DB_PORT: 5432
+      DB_USER: postgresUser
+      DB_PASSWORD: pgSuperSecretMnogaBycaBab
+      DB_NAME: population  # Убедитесь, что это имя базы данных
+    ports:
+      - "3000:3000"  # Пробрасываем порт 3000
+    networks:
+      - app-network
+    command: ["./run_scripts.sh"]  # Запускаем ваш скрипт
 
 volumes:
-  postgres:
+  postgres:  # Определяем том для хранения данных PostgreSQL
     driver: local
