@@ -15,7 +15,6 @@ COPY . .
 
 # Делаем run_scripts.sh исполняемым
 RUN chmod +x run_scripts.sh
-RUN chmod +x waitFor.sh
 
 # Указываем порт, который будет использовать приложение
 EXPOSE 3000
